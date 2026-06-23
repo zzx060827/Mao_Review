@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>毛概 1-6 章重点问答 - 智能背诵复习</title>
+    <style>
+        :root {
+            --primary-color: #263238;
+            --accent-color: #b8322a;
+            --focus-color: #7b3f00;
+            --success-color: #1f8f5f;
+            --warning-color: #c77700;
+            --error-color: #bd2f2f;
+            --bg-color: #f4f5f2;
+            --card-bg: #ffffff;
+            --text-gray: #64706d;
+            --line-color: #e5e7df;
+            --soft-red: #fff4f2;
+            --soft-gold: #fff8e8;
+            --soft-green: #eefaf4;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: var(--bg-color);
+            color: var(--primary-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1040px;
+            background: var(--card-bg);
+            border: 1px solid var(--line-color);
+            border-radius: 14px;
+            box-shadow: 0 14px 34px rgba(33, 39, 36, 0.08);
+            padding: 28px;
+            display: flex;
+            flex-direction: column;
+            height: 90vh;
+            position: relative;
+        }
+
+        .branding-section {
+            position: absolute;
+            top: 18px;
+            right: 20px;
+            z-index: 10;
+        }
+
+        .branding-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: var(--text-gray);
+            font-size: 14px;
+        }
+
+        .branding-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid transparent;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+        }
+
+        .branding-link:hover { color: var(--accent-color); }
+        .branding-link:hover .branding-avatar { border-color: var(--accent-color); }
+
+        h1 {
+            text-align: center;
+            margin: 8px 110px 6px 0;
+            font-size: 25px;
+            color: #1f2a2e;
+            letter-spacing: 0;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--text-gray);
+            margin: 0 110px 16px 0;
+            font-size: 14px;
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 14px;
+            background: #f8f8f5;
+            padding: 10px 14px;
+            border-radius: 8px;
+            border: 1px solid var(--line-color);
+            font-size: 14px;
+        }
+
+        .controls-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+
+        .mode-group, .nav-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 8px 13px;
+            border: 1px solid #d8d9d2;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.18s, color 0.18s, transform 0.18s;
+            background-color: #fff;
+            color: #3f4947;
+            font-family: inherit;
+        }
+
+        button.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        button.active.focus-mode-btn {
+            background-color: var(--focus-color);
+            border-color: var(--focus-color);
+        }
+
+        button:hover:not(:disabled) {
+            background-color: #f2f3ef;
+            transform: translateY(-1px);
+        }
+
+        button.active:hover { opacity: 0.93; }
+
+        button:disabled {
+            cursor: not-allowed;
+            opacity: 0.72;
+            transform: none;
+        }
+
+        .jump-input {
+            width: 58px;
+            padding: 7px 6px;
+            border: 1px solid #d8d9d2;
+            border-radius: 5px;
+            text-align: center;
+            font-family: inherit;
+        }
+
+        .question-card {
+            background: #fff;
+            border: 2px solid #e3e5dd;
+            border-radius: 12px;
+            padding: 24px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .meta-row {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .section-badge, .level-badge {
+            display: inline-block;
+            font-size: 13px;
+            font-weight: 700;
+            border-radius: 999px;
+            padding: 4px 10px;
+            width: fit-content;
+        }
+
+        .section-badge {
+            color: var(--accent-color);
+            background: var(--soft-red);
+            border: 1px solid #efc7c1;
+        }
+
+        .level-badge {
+            color: #775000;
+            background: var(--soft-gold);
+            border: 1px solid #f1d49c;
+        }
+
+        .question-title {
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            color: #111827;
+            line-height: 1.55;
+        }
+
+        .hint-text {
+            font-size: 15px;
+            color: #835100;
+            background-color: var(--soft-gold);
+            padding: 10px 12px;
+            border-radius: 6px;
+            margin-bottom: 14px;
+            border-left: 4px solid var(--warning-color);
+            display: none;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 132px;
+            padding: 14px;
+            border: 1px solid #cfd4cf;
+            border-radius: 8px;
+            resize: vertical;
+            font-size: 16px;
+            font-family: inherit;
+            margin-bottom: 18px;
+            line-height: 1.65;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(184, 50, 42, 0.12);
+        }
+
+        .action-area {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: auto;
+        }
+
+        .btn-submit { background-color: var(--success-color); color: white; border: none; flex: 2; }
+        .btn-hint { color: var(--warning-color); border-color: var(--warning-color); }
+        .btn-prev { flex: 1; }
+        .btn-next { flex: 1; border-color: var(--accent-color); color: var(--accent-color); }
+        .btn-list { border-color: #88928d; color: #35403d; }
+        .btn-next:hover { background-color: var(--accent-color); color: white; }
+        .btn-hint:hover { background-color: var(--warning-color); color: white; }
+
+        .result-area {
+            margin-top: 18px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #fbfbf8;
+            display: none;
+            border: 1px solid var(--line-color);
+        }
+
+        .result-header {
+            font-weight: 800;
+            font-size: 16px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .score-badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            color: white;
+        }
+
+        .badge-pass { background-color: var(--success-color); }
+        .badge-fail { background-color: var(--error-color); }
+
+        .standard-answer {
+            color: #33403c;
+            background: var(--soft-green);
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 4px solid var(--success-color);
+            line-height: 1.75;
+            white-space: pre-wrap;
+            font-size: 15px;
+        }
+
+        .list-view-area {
+            display: none;
+            flex-grow: 1;
+            overflow-y: auto;
+            background: #fff;
+            border: 1px solid var(--line-color);
+            border-radius: 12px;
+            padding: 16px;
+            scroll-behavior: smooth;
+        }
+
+        .list-section {
+            margin-bottom: 20px;
+        }
+
+        .list-heading {
+            position: sticky;
+            top: -16px;
+            z-index: 2;
+            background: rgba(255, 255, 255, 0.96);
+            border-bottom: 1px solid var(--line-color);
+            padding: 12px 4px 10px;
+            font-size: 16px;
+            font-weight: 900;
+            color: #182421;
+        }
+
+        .list-heading span {
+            color: var(--text-gray);
+            font-size: 13px;
+            font-weight: 600;
+            margin-left: 6px;
+        }
+
+        .list-item {
+            padding: 16px 18px;
+            border: 1px solid #eef0ea;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+
+        .list-item:hover { background-color: #fafaf7; border-color: #dde0d8; }
+        .list-item.active-item {
+            background-color: var(--soft-red);
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(184, 50, 42, 0.10);
+        }
+
+        .list-s {
+            font-size: 13px;
+            color: var(--accent-color);
+            margin-bottom: 8px;
+            font-weight: 800;
+        }
+
+        .list-q {
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-bottom: 9px;
+            font-size: 16px;
+            line-height: 1.55;
+        }
+
+        .list-a {
+            color: #34413e;
+            font-size: 15px;
+            line-height: 1.68;
+            white-space: pre-wrap;
+        }
+
+        .mini-note {
+            font-size: 13px;
+            color: var(--text-gray);
+        }
+
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cfd2cc; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #9fa79f; }
+
+        @media (max-width: 760px) {
+            body { padding: 12px; }
+            .container { height: auto; min-height: 94vh; padding: 18px; }
+            .branding-section { position: static; align-self: flex-end; margin-bottom: 8px; }
+            h1, .subtitle { margin-right: 0; }
+            .question-card { padding: 18px; }
+            .action-area { flex-wrap: wrap; }
+            .btn-submit { flex-basis: 100%; order: -1; }
+            .btn-list { flex-basis: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="branding-section">
+        <a href="https://github.com/zzx060827" target="_blank" rel="noopener noreferrer" class="branding-link">
+            <span>Presented by zzx</span>
+            <img src="https://i.postimg.cc/44VBbR31/20250611113901.jpg" class="branding-avatar" alt="User Avatar" onerror="this.style.display='none'">
+        </a>
+    </div>
+
+    <h1>毛概 1-6 章重点问答背诵</h1>
+    <p class="subtitle">范围：第一章至第六章；重点加强第一章、第二章重点点位和第六章邓小平理论</p>
+
+    <div class="stats-bar">
+        <span id="data-source-text">当前题库: 毛概 1-6 章</span>
+        <span id="progress-text">进度: 1 / 51</span>
+        <span id="score-text">准确率: --</span>
+        <span id="error-count" style="color: var(--error-color);">错题本: 0</span>
+        <span class="mini-note">答案按“是什么/原因/内容/意义”精简</span>
+    </div>
+
+    <div class="controls-row">
+        <div class="mode-group">
+            <button id="mode-seq" class="active" onclick="switchMode('seq')">顺序模式</button>
+            <button id="mode-rand" onclick="switchMode('rand')">随机模式</button>
+            <button id="mode-focus" class="focus-mode-btn" onclick="switchMode('focus')">重点模式</button>
+            <button id="mode-err" onclick="switchMode('err')">错题本</button>
+            <button id="mode-list" onclick="switchMode('list')">知识点一览</button>
+        </div>
+
+        <div class="nav-group" id="nav-controls">
+            <span>跳转至:</span>
+            <input type="number" id="jump-index" class="jump-input" min="1" onkeypress="handleJumpEnter(event)">
+            <button onclick="jumpToQuestion()">Go</button>
+        </div>
+    </div>
+
+    <div id="quiz-area" class="question-card">
+        <div class="meta-row">
+            <div id="section-text" class="section-badge">加载中...</div>
+            <div id="level-text" class="level-badge">加载中...</div>
+        </div>
+        <div id="question-text" class="question-title">加载中...</div>
+
+        <div id="hint-display" class="hint-text"></div>
+
+        <textarea id="user-input" placeholder="请在此输入你的答案...（支持模糊匹配，不计标点符号）"></textarea>
+
+        <div class="action-area">
+            <button class="btn-prev" onclick="changeQuestion(-1)">上一题</button>
+            <button class="btn-hint" onclick="toggleHint()">查看提示</button>
+            <button class="btn-submit" id="btn-submit" onclick="checkAnswer()">提交验证</button>
+            <button class="btn-next" id="btn-next" onclick="changeQuestion(1)">下一题</button>
+            <button class="btn-list" onclick="openListForCurrent()">看知识点</button>
+        </div>
+
+        <div id="result-area" class="result-area">
+            <div id="result-header" class="result-header"></div>
+            <div id="standard-answer" class="standard-answer"></div>
+        </div>
+    </div>
+
+    <div id="list-view" class="list-view-area"></div>
+</div>
+
+<script>
+    const data = [
+        { chapter: "第一章", level: "掌握", focus: true, h: "历史条件，实践基础", q: "毛泽东思想形成发展的历史条件是什么？", a: "1.时代条件：世界进入帝国主义和无产阶级革命时代，战争与革命成为时代主题。\n2.思想条件：十月革命给中国送来马克思主义，为中国革命提供科学指导思想。\n3.国际环境：二战后两大阵营对立，西方对我国封锁和和平演变。\n4.实践基础：中国共产党领导人民进行革命和建设的成功实践。" },
+        { chapter: "第一章", level: "掌握", focus: true, h: "萌芽，形成，成熟，继续发展", q: "毛泽东思想形成发展的过程怎样概括？", a: "1.萌芽：大革命时期，提出新民主主义革命基本思想。\n2.初步形成：土地革命战争时期，提出农村包围城市、武装夺取政权。\n3.成熟：抗日战争时期，系统阐述新民主主义革命理论，党的七大确立为指导思想。\n4.继续发展：解放战争和新中国成立后，形成社会主义改造、人民民主专政、社会主义建设等理论。" },
+        { chapter: "第一章", level: "掌握", focus: true, h: "七个主要内容", q: "毛泽东思想的主要内容包括哪些？", a: "1.新民主主义革命理论。\n2.社会主义革命和社会主义建设理论。\n3.革命军队建设和军事战略理论。\n4.政策和策略理论。\n5.思想政治工作和文化工作理论。\n6.党的建设理论。\n7.国际战略和外交工作理论。" },
+        { chapter: "第一章", level: "重点掌握", focus: true, h: "活的灵魂之一：实事求是", q: "如何理解毛泽东思想活的灵魂中的“实事求是”？", a: "1.内涵：一切从实际出发，理论联系实际，在实践中检验和发展真理。\n2.地位：毛泽东思想的基本点和精髓，是党的思想路线。\n3.要求：深入实际，把握规律，按客观规律办事；正确把握基本国情；推进实践基础上的理论创新。" },
+        { chapter: "第一章", level: "重点掌握", focus: true, h: "活的灵魂之一：群众路线", q: "如何理解毛泽东思想活的灵魂中的“群众路线”？", a: "1.内涵：一切为了群众，一切依靠群众，从群众中来，到群众中去。\n2.地位：党的生命线和根本工作路线，是党永葆青春活力和战斗力的重要传家宝。\n3.要求：坚持人民是历史发展的根本力量；坚持全心全意为人民服务；保持党同人民群众的血肉联系。" },
+        { chapter: "第一章", level: "重点掌握", focus: true, h: "活的灵魂之一：独立自主", q: "如何理解毛泽东思想活的灵魂中的“独立自主”？", a: "1.内涵：独立思考，走自己的路，立足依靠自己力量，同时积极争取外援、学习有益经验。\n2.地位：中华民族精神之魂，是立党立国的重要原则。\n3.要求：中国的事情由中国人民自己处理；坚持独立自主和平外交政策，走和平发展道路。" },
+        { chapter: "第一章", level: "重点掌握", focus: true, h: "第一个重大理论成果，科学指南，精神财富", q: "毛泽东思想的历史地位是什么？", a: "1.是马克思主义中国化时代化的第一个重大理论成果。\n2.是中国革命和建设的科学指南。\n3.是中国共产党和中国人民宝贵的精神财富。" },
+        { chapter: "第一章", level: "重点掌握", focus: true, h: "理论基础，理论准备，通俗化民族化", q: "毛泽东思想为中国特色社会主义理论体系作了哪些准备？", a: "1.理论基础：实事求是、群众路线、独立自主贯穿后来的理论创新。\n2.理论准备：关于社会主义建设、矛盾处理、工业化道路、民主政治、党的建设等思想，为开创中国特色社会主义提供资源。\n3.表达启迪：理论通俗化、表达民族化，为新时代党的理论创新提供启发。" },
+
+        { chapter: "第二章", level: "掌握", focus: false, h: "半殖民地半封建，主要矛盾，时代转变", q: "新民主主义革命理论形成的国情和时代依据是什么？", a: "1.国情：近代中国逐渐成为半殖民地半封建社会。\n2.主要矛盾：帝国主义和中华民族的矛盾、封建主义和人民大众的矛盾。\n3.根本任务：推翻帝国主义、封建主义、官僚资本主义统治。\n4.时代特征：十月革命后成为世界无产阶级社会主义革命的一部分；五四运动后进入新民主主义革命阶段。" },
+        { chapter: "第二章", level: "掌握", focus: false, h: "旧民主主义失败，艰辛探索", q: "新民主主义革命理论形成的实践基础是什么？", a: "1.旧民主主义革命失败，呼唤新的革命理论。\n2.新民主主义革命的艰辛探索，为理论形成提供实践基础。\n3.理论是在总结革命斗争正反两方面经验中形成的。" },
+        { chapter: "第二章", level: "重点掌握", focus: true, h: "无产阶级领导，人民大众，反三座大山", q: "新民主主义革命总路线的内容和地位是什么？", a: "1.内容：无产阶级领导的，人民大众的，反对帝国主义、封建主义和官僚资本主义的革命。\n2.地位：反映中国革命基本规律。\n3.作用：指明革命对象、动力、领导力量，是新民主主义革命的指导路线。" },
+        { chapter: "第二章", level: "重点掌握", focus: true, h: "帝国主义，封建主义，官僚资本主义", q: "新民主主义革命的对象是什么？", a: "1.帝国主义：首要对象，是中国贫困落后和灾难祸害的总根源。\n2.封建主义：帝国主义统治和军阀专制的社会基础，是现代化和民主化的主要障碍。\n3.官僚资本主义：依靠帝国主义、勾结封建势力、利用国家政权发展起来，严重束缚生产力。" },
+        { chapter: "第二章", level: "重点掌握", focus: true, h: "工人，农民，小资产阶级，民族资产阶级", q: "新民主主义革命的动力有哪些？", a: "1.无产阶级：最基本动力，新的生产力代表，革命领导力量。\n2.农民阶级：革命主力军，农民问题是中国革命基本问题。\n3.城市小资产阶级：可靠同盟者。\n4.民族资产阶级：具有两面性，是革命力量之一，但不能成为主要力量和领导力量。" },
+        { chapter: "第二章", level: "重点掌握", focus: true, h: "中心问题，核心问题，根本保证", q: "为什么无产阶级领导权是新民主主义革命理论的核心？", a: "1.地位：无产阶级领导权是中国革命的中心问题，也是新民主主义革命理论的核心问题。\n2.区别：新旧民主主义革命的根本标志，是领导权掌握在无产阶级还是资产阶级手中。\n3.保证：无产阶级及其政党领导，是中国革命胜利的根本保证。\n4.要求：建立统一战线，坚持独立自主，建设革命武装，加强党的建设。" },
+        { chapter: "第二章", level: "掌握", focus: false, h: "性质，前途，四点区别", q: "新民主主义革命的性质、前途及其与旧民主主义革命的区别是什么？", a: "1.性质：资产阶级民主主义革命。\n2.前途：社会主义。\n3.区别：属于世界无产阶级社会主义革命的一部分；领导力量是无产阶级及其先锋队；指导思想是马克思列宁主义；前途是社会主义而不是资本主义。\n4.联系：民主主义革命是社会主义革命的必要准备，社会主义革命是民主主义革命的必然趋势。" },
+        { chapter: "第二章", level: "掌握", focus: false, h: "政治，经济，文化纲领", q: "新民主主义革命的基本纲领是什么？", a: "1.政治纲领：建立无产阶级领导、以工农联盟为基础、各革命阶级联合专政的新民主主义共和国。\n2.经济纲领：没收地主土地归农民；没收官僚资本归新民主主义国家；保护民族工商业。\n3.文化纲领：建设无产阶级领导的人民大众的反帝反封建文化，即民族的、科学的、大众的文化。" },
+        { chapter: "第二章", level: "掌握", focus: false, h: "农村包围城市，武装夺取政权，三者关系", q: "新民主主义革命道路的内容和意义是什么？", a: "1.内容：农村包围城市、武装夺取政权。\n2.关键：处理好土地革命、武装斗争、农村革命根据地建设三者关系。\n3.意义：反映半殖民地半封建社会民主革命规律，是运用马克思主义解决中国革命问题的光辉典范。" },
+        { chapter: "第二章", level: "重点掌握", focus: true, h: "统一战线，地位，原因，两个联盟，经验", q: "新民主主义革命三大法宝中，统一战线的地位、原因、内容和经验是什么？", a: "1.是什么：统一战线是无产阶级政党策略思想的重要内容。\n2.原因：半殖民地半封建社会的阶级状况、革命长期残酷和发展不平衡决定了必要性；社会矛盾交织提供了可能性。\n3.内容：两个联盟，一是工人阶级同农民、知识分子及其他劳动者的联盟，主要是工农联盟；二是工人阶级同非劳动人民的联盟，主要是同民族资产阶级的联盟。\n4.经验：巩固工农联盟；正确对待资产阶级，既联合又斗争；区别对待；坚持独立自主。" },
+        { chapter: "第二章", level: "重点掌握", focus: true, h: "武装斗争，特点和优点", q: "新民主主义革命三大法宝中，武装斗争应怎样掌握？", a: "1.地位：武装斗争是中国革命的特点和优点之一。\n2.领导：坚持党对军队的绝对领导。\n3.军队：建设全心全意为人民服务的人民军队。\n4.方法：开展革命政治工作，坚持正确战略战术原则。" },
+        { chapter: "第二章", level: "重点掌握", focus: true, h: "思想，组织，作风，政治路线", q: "新民主主义革命三大法宝中，党的建设经验是什么？", a: "1.内容：思想建设、组织建设、作风建设。\n2.首位：始终把思想建设放在党的建设首位。\n3.组织：任何时候都重视党的组织建设。\n4.作风：重视党的作风建设。\n5.路线：必须联系党的政治路线加强党的建设。" },
+        { chapter: "第二章", level: "重点掌握", focus: true, h: "两个武器，中心支柱，党的组织", q: "统一战线、武装斗争、党的建设三者关系是什么？", a: "1.统一战线和武装斗争，是中国革命两个基本特点，也是战胜敌人的两个基本武器。\n2.统一战线是实行武装斗争的统一战线。\n3.武装斗争是统一战线的中心支柱。\n4.党的组织是掌握统一战线和武装斗争这两个武器的英勇战士。" },
+        { chapter: "第二章", level: "重点掌握", focus: true, h: "理论意义，现实意义", q: "新民主主义革命理论的意义是什么？", a: "1.理论意义：揭示近代中国革命客观规律，科学回答中国革命向何处去和革命发展阶段问题。\n2.理论成果：是马克思主义中国化时代化的重要理论成果，开辟其发展道路，是党的集体智慧结晶。\n3.现实意义：指导党完成新民主主义革命，建立中华人民共和国，实现民族独立、人民解放，开启中国发展新纪元。\n4.世界意义：改变世界政治格局，鼓舞被压迫民族和人民的斗争。" },
+
+        { chapter: "第三章", level: "重点掌握", focus: false, h: "一化三改，主体两翼", q: "党在过渡时期总路线的主要内容和关系是什么？", a: "1.内容：在相当长时期内，逐步实现社会主义工业化，并逐步实现对农业、手工业和资本主义工商业的社会主义改造。\n2.概括：一化三改。\n3.关系：一化是主体，三改是两翼，两者相辅相成、相互促进。\n4.意义：体现工业化与社会主义改造结合，也体现解放生产力、发展生产力、变革生产关系的统一。" },
+        { chapter: "第三章", level: "掌握", focus: false, h: "农业，手工业，资本主义工商业", q: "适合中国特点的社会主义改造道路包括哪些？", a: "1.农业：引导农民组织起来，走互助合作道路，遵循自愿互利、典型示范、国家帮助原则。\n2.手工业：积极领导、稳步前进，由小到大、由低级到高级。\n3.资本主义工商业：和平赎买，采取从低级到高级的国家资本主义形式，并把工商业者改造为社会主义劳动者。" },
+        { chapter: "第三章", level: "掌握", focus: false, h: "和平赎买，原因，作用", q: "为什么能够对资本主义工商业实行和平赎买？", a: "1.含义：国家有偿地把私营企业改变为国营企业，把资本主义私有制改为社会主义公有制。\n2.阶级基础：民族资产阶级具有两面性。\n3.政治基础：党同民族资产阶级长期保持统一战线关系。\n4.制度基础：人民民主专政国家政权和社会主义国营经济掌握国家经济命脉。\n5.作用：有利于发展经济、巩固统一战线、发挥民族资产阶级和知识分子作用。" },
+        { chapter: "第三章", level: "掌握", focus: false, h: "同时并举，逐步过渡，和平方法", q: "社会主义改造的历史经验是什么？", a: "1.坚持社会主义工业化建设与社会主义改造同时并举。\n2.采取积极引导、逐步过渡的方式。\n3.用和平方法进行改造。" },
+        { chapter: "第三章", level: "掌握", focus: false, h: "1956，公有制，制度确立", q: "社会主义基本制度在中国确立的标志和依据是什么？", a: "1.标志：1956年底社会主义改造基本完成。\n2.经济依据：社会主义经济成分占绝对优势，社会主义公有制成为社会经济基础。\n3.政治依据：人民民主政治建设推进，根本政治制度和基本政治制度确立。\n4.阶级关系：人民成为国家、社会和自己命运的主人，阶级关系发生根本变化。\n5.理论依据：经济文化落后国家可以先于发达国家实行社会主义革命、建设社会主义制度的理论。" },
+        { chapter: "第三章", level: "掌握", focus: false, h: "制度基础，生产力，世界意义，理论发展", q: "确立社会主义基本制度的重大意义是什么？", a: "1.是中国历史上最深刻最伟大的社会变革，为当代中国发展进步奠定制度基础。\n2.提高劳动人民积极性和创造性，促进社会生产力发展，显示社会主义优越性。\n3.使劳动人民真正成为国家主人，实现阶级关系根本变革。\n4.是世界社会主义发展史上的伟大胜利，增强社会主义力量，维护世界和平。\n5.证明并丰富发展了马克思列宁主义和科学社会主义理论。" },
+
+        { chapter: "第四章", level: "掌握", focus: false, h: "论十大关系，积极消极因素，党的领导，民主政治", q: "如何理解调动一切积极因素为社会主义事业服务？", a: "1.背景：探索适合中国特点的社会主义建设道路，需要处理一系列重大关系。\n2.内涵：积极因素和消极因素既统一又斗争，要克服消极因素并化消极为积极。\n3.原则：坚持中国共产党领导，发展社会主义民主政治。\n4.地位：是党关于社会主义建设的重要方针，对团结全国人民建设社会主义现代化国家有长远指导意义。" },
+        { chapter: "第四章", level: "重点掌握", focus: false, h: "基本矛盾，主要矛盾，根本任务", q: "社会主义社会基本矛盾、主要矛盾和根本任务是什么？", a: "1.基本矛盾：仍是生产力和生产关系、经济基础和上层建筑之间的矛盾。\n2.特点：非对抗性，适应是基本方面，矛盾是非基本方面。\n3.主要矛盾：人民对于先进工业国的要求同落后农业国现实之间的矛盾，人民对于经济文化迅速发展的需要同当前不能满足需要之间的矛盾。\n4.根本任务：把党和国家工作重点转到技术革命和社会主义建设上来。" },
+        { chapter: "第四章", level: "重点掌握", focus: false, h: "敌我矛盾，人民内部矛盾，民主专政", q: "社会主义社会两类不同性质矛盾及处理方法是什么？", a: "1.敌我矛盾：根本利益对立基础上的矛盾，是对抗性的矛盾。\n2.人民内部矛盾：人民根本利益一致基础上的矛盾，是非对抗性的矛盾，并居于主导地位。\n3.处理敌我矛盾：采用专政方法。\n4.处理人民内部矛盾：采用民主方法，即讨论、批评、说服教育。" },
+        { chapter: "第四章", level: "重点掌握", focus: false, h: "团结批评团结，统筹兼顾，双百，长期共存", q: "正确处理人民内部矛盾的方针有哪些？", a: "1.总方针：用民主方法解决人民内部矛盾。\n2.政治思想领域：团结-批评-团结，坚持说服教育和讨论。\n3.物质利益分配：统筹兼顾、适当安排。\n4.政府和群众：坚持民主集中制，克服官僚主义，加强思想教育。\n5.科学文化：百花齐放、百家争鸣。\n6.党派关系：长期共存、互相监督。\n7.民族关系：民族平等、团结互助。" },
+        { chapter: "第四章", level: "掌握", focus: false, h: "农轻重，两条腿，综合平衡", q: "走中国工业化道路的思想是什么？", a: "1.总方针：以农业为基础，以工业为主导，以农轻重为序发展国民经济。\n2.重点论：把重工业作为经济建设重点，建立基础工业体系和国防工业体系。\n3.两点论：重工业和轻工业、中央和地方、沿海和内地、大型和中小型企业同时并举。\n4.要求：既反保守又反冒进，在综合平衡中稳步前进；调整所有制结构；探索适合国情的经济体制。" },
+        { chapter: "第四章", level: "重点掌握", focus: false, h: "制度，经验理论物质基础，科学社会主义", q: "社会主义建设道路初步探索的意义是什么？", a: "1.巩固和发展了我国社会主义制度。\n2.为开创中国特色社会主义提供宝贵经验、理论准备和物质基础。\n3.丰富了科学社会主义的理论和实践。\n4.说明社会主义建设没有固定模式，各国应根据国情独立自主选择发展道路。" },
+        { chapter: "第四章", level: "重点掌握", focus: false, h: "六个必须", q: "社会主义建设道路初步探索的经验教训是什么？", a: "1.必须把马克思主义与中国实际相结合，探索符合中国特点的道路。\n2.必须正确认识主要矛盾和根本任务，集中力量发展生产力。\n3.必须从实际出发，建设规模和速度要同国力相适应。\n4.必须发展社会主义民主，健全社会主义法制。\n5.必须坚持民主集中制和集体领导，加强执政党建设。\n6.必须坚持对外开放，吸收人类文明成果。" },
+
+        { chapter: "第五章", level: "掌握", focus: false, h: "国际背景，国内背景，实践基础", q: "中国特色社会主义理论体系形成发展的社会历史条件是什么？", a: "1.国际背景：和平与发展成为时代主题，世界多极化和经济全球化发展，综合国力竞争加剧。\n2.国内背景：改革开放后反思历史经验，探索什么是社会主义、怎样建设社会主义；新形势下回答建设什么样的党、怎样建设党，以及实现什么样的发展、怎样发展。\n3.实践基础：改革开放和社会主义现代化建设的伟大实践，包括农村、城市、所有制、分配、对外开放以及政治文化社会党建等领域改革。" },
+        { chapter: "第五章", level: "掌握", focus: false, h: "邓小平理论，三个代表，科学发展观，习近平思想", q: "中国特色社会主义理论体系形成发展过程怎样概括？", a: "1.形成：十一届三中全会后，邓小平理论逐步形成并成熟，是开篇之作。\n2.跨世纪发展：“三个代表”重要思想回答建设什么样的党、怎样建设党，丰富发展理论体系。\n3.新世纪新阶段发展：科学发展观回答实现什么样的发展、怎样发展。\n4.新时代新篇章：习近平新时代中国特色社会主义思想是中国特色社会主义理论体系的重要组成部分。" },
+        { chapter: "第五章", level: "掌握", focus: false, h: "理论创造，三大规律，思想基础，行动指南", q: "中国特色社会主义理论体系的地位是什么？", a: "1.是中国共产党长期探索的伟大理论创造，同马克思列宁主义、毛泽东思想一脉相承又与时俱进。\n2.是马克思主义中国化时代化的重大理论成果。\n3.深化了对共产党执政规律、社会主义建设规律、人类社会发展规律的认识。\n4.是共同思想基础、精神支柱、行动指南、根本指针，是党宝贵的政治和精神财富。" },
+
+        { chapter: "第六章", level: "重点掌握", focus: true, h: "什么是社会主义，怎样建设社会主义，本质", q: "邓小平理论首要的基本的理论问题和社会主义本质是什么？", a: "1.基本问题：在经济文化比较落后的中国，建设什么样的社会主义、怎样建设社会主义。\n2.关键：坚持社会主义基本制度基础上，进一步认清社会主义本质。\n3.本质：解放生产力，发展生产力，消灭剥削，消除两极分化，最终达到共同富裕。\n4.内涵：既包括生产力问题，也包括生产关系和发展目标问题，是有机整体。" },
+        { chapter: "第六章", level: "重点掌握", focus: true, h: "廓清观念，提高认识，指导改革", q: "社会主义本质理论的意义是什么？", a: "1.反映人民利益和时代要求，廓清不合乎时代进步和社会发展规律的模糊观念。\n2.摆脱拘泥于具体模式而忽略社会主义本质的错误倾向。\n3.把对社会主义的认识提高到新的科学水平。\n4.是对马克思主义的重大发展，指导改革沿着社会主义本质要求的方向发展。" },
+        { chapter: "第六章", level: "重点掌握", focus: true, h: "解放思想，实事求是，辩证统一，意义", q: "邓小平理论的精髓是什么？", a: "1.内容：解放思想、实事求是，是中国共产党的思想路线。\n2.关系：解放思想是实事求是的前提；实事求是是解放思想的基础。\n3.要求：坚持二者统一，克服主观主义、盲目性、片面性和绝对化，按客观规律办事。\n4.意义：推动拨乱反正，破除僵化模式，要求从社会主义初级阶段实际出发，并以三个有利于检验是非得失。" },
+        { chapter: "第六章", level: "重点掌握", focus: true, h: "两层含义，长期性，总依据", q: "社会主义初级阶段理论的科学内涵和意义是什么？", a: "1.含义：我国在生产力落后、商品经济不发达条件下建设社会主义必经的特定阶段。\n2.两层含义：我国已经是社会主义社会，必须坚持社会主义；我国社会主义还处在初级阶段，必须从实际出发。\n3.长期性：我国仍处于并将长期处于社会主义初级阶段，这是最大实际。\n4.意义：揭示当代中国历史方位，为建设中国特色社会主义提供总依据。" },
+        { chapter: "第六章", level: "重点掌握", focus: true, h: "一个中心，两个基本点，立国之本，强国之路", q: "党在社会主义初级阶段基本路线的内容是什么？", a: "1.总内容：领导和团结全国各族人民，以经济建设为中心，坚持四项基本原则，坚持改革开放，自力更生、艰苦创业，为建设富强、民主、文明的社会主义现代化国家而奋斗。\n2.核心：一个中心、两个基本点。\n3.经济建设：回答根本任务问题，是最根本拨乱反正。\n4.四项基本原则：立国之本，政治基石。\n5.改革开放：强国之路，发展进步的活力源泉。" },
+        { chapter: "第六章", level: "重点掌握", focus: true, h: "发展生产力，三步走，共同富裕", q: "邓小平关于社会主义根本任务和发展战略的理论是什么？", a: "1.根本任务：发展生产力，党和国家工作重点是经济建设。\n2.硬道理：发展才是硬道理，中国解决所有问题关键靠自己的发展。\n3.科技：科学技术是第一生产力。\n4.三步走：温饱、小康、到21世纪中叶基本实现现代化。\n5.共同富裕：允许一部分地区、一部分人先富起来，处理好先富和共富关系，逐步达到共同富裕。" },
+        { chapter: "第六章", level: "重点掌握", focus: true, h: "第二次革命，直接动力，三个有利于，对外开放", q: "社会主义改革开放理论的要点是什么？", a: "1.地位：改革是社会主义制度自我完善和发展，是中国的第二次革命，是现代化必由之路。\n2.动力：改革是社会主义社会发展的直接动力，通过改革解放和发展生产力。\n3.标准：三个有利于，即是否有利于发展社会主义生产力、增强综合国力、提高人民生活水平。\n4.开放：对外开放是建设中国特色社会主义的基本国策。\n5.意义：改革开放是当代中国鲜明标志和活力源泉，是决定中国命运和民族复兴的关键一招。" },
+        { chapter: "第六章", level: "重点掌握", focus: true, h: "计划市场，经济手段，制度结合", q: "社会主义市场经济理论的主要内容和意义是什么？", a: "1.形成标志：1992年南方谈话。\n2.核心：计划经济和市场经济不是划分社会制度的标志。\n3.手段：计划和市场都是经济手段，各有优势。\n4.特色：市场经济可以同不同社会制度结合，坚持社会主义制度与市场经济结合，是社会主义市场经济的特色和优势。\n5.意义：是马克思主义政治经济学重大创新，为经济体制改革目标和经济建设提供指南。" },
+        { chapter: "第六章", level: "重点掌握", focus: true, h: "物质文明，精神文明，法制，反腐", q: "“两手抓，两手都要硬”的内容和意义是什么？", a: "1.内容一：一手抓物质文明，一手抓精神文明。\n2.内容二：一手抓建设，一手抓法制，民主和法制相统一。\n3.内容三：一手抓改革开放，一手抓惩治腐败。\n4.理论意义：坚持辩证法全面性，坚持两点论和重点论统一。\n5.现实意义：克服一手硬、一手软，丰富党的领导方法和工作方法。" },
+        { chapter: "第六章", level: "重点掌握", focus: true, h: "一个中国，两制并存，高度自治，和平统一", q: "“一国两制”构想的基本内容和意义是什么？", a: "1.形成：从解决台湾问题开始，首先用于香港、澳门问题。\n2.核心：坚持一个中国，是两岸关系和和平统一的基础。\n3.内容：两制并存，高度自治，尽最大努力争取和平统一但不承诺放弃使用武力，寄希望于台湾人民。\n4.理论意义：坚持原则性与灵活性统一，是对马克思主义国家学说的创造性发展。\n5.现实意义：开辟以和平方式实现祖国统一的新途径。" },
+        { chapter: "第六章", level: "重点掌握", focus: true, h: "和平与发展，外交政策，新秩序，党际关系", q: "邓小平关于外交和国际战略的基本内容是什么？", a: "1.时代主题：和平与发展是当今世界两大带有全球性的战略问题，二者相辅相成。\n2.外交目标：维护我国独立和主权，促进世界和平与发展。\n3.国际关系：在和平共处五项原则基础上，建立和平、稳定、公正、合理的国际新秩序。\n4.党际关系：坚持独立自主、完全平等、互相尊重、互不干涉内部事务。" },
+        { chapter: "第六章", level: "重点掌握", focus: true, h: "关键在党，理论学习，组织，作风，制度", q: "邓小平党的建设理论的主要内容是什么？", a: "1.意义：建设中国特色社会主义，关键在于坚持、加强和改善党的领导。\n2.理论学习：重视马克思主义理论学习。\n3.组织建设：坚持和加强民主集中制，加强领导班子建设，培养德才兼备干部。\n4.作风建设：必须打好党风建设这场硬仗。\n5.制度建设：领导制度、组织制度更带有根本性、全局性、稳定性和长期性。" },
+        { chapter: "第六章", level: "掌握", focus: true, h: "继承发展，开篇之作，科学指南", q: "邓小平理论的历史地位是什么？", a: "1.是马克思列宁主义、毛泽东思想的继承和发展，是全党全国人民集体智慧结晶。\n2.是中国特色社会主义理论体系的开篇之作，初步回答建设中国特色社会主义的一系列基本问题。\n3.是改革开放和社会主义现代化建设的科学指南。\n4.是党和国家必须长期坚持的指导思想，是中国共产党和中国人民宝贵的精神财富。" }
+    ];
+
+    const questions = data.map((item, index) => ({ id: index, s: `${item.chapter}｜${item.level}`, ...item }));
+    let activeIds = questions.map(q => q.id);
+    let currentMode = 'seq';
+    let currentIndex = 0;
+    let errorList = [];
+    let shuffledIds = [];
+    let lastQuestionId = 0;
+    let pendingAnchorId = null;
+
+    function getModeIds(mode) {
+        if (mode === 'focus') return questions.filter(q => q.focus === true || q.level === '重点掌握').map(q => q.id);
+        if (mode === 'err') return [...errorList];
+        if (mode === 'rand') {
+            if (!shuffledIds.length || shuffledIds.length !== questions.length) {
+                shuffledIds = questions.map(q => q.id).sort(() => Math.random() - 0.5);
+            }
+            return shuffledIds;
+        }
+        return questions.map(q => q.id);
+    }
+
+    function switchMode(mode) {
+        if (mode === 'err' && errorList.length === 0) {
+            alert("当前错题本为空！");
+            return;
+        }
+
+        currentMode = mode;
+        if (mode === 'rand') shuffledIds = questions.map(q => q.id).sort(() => Math.random() - 0.5);
+
+        document.querySelectorAll('.mode-group button').forEach(btn => btn.classList.remove('active'));
+        const btn = document.getElementById(`mode-${mode}`);
+        if (btn) btn.classList.add('active');
+
+        const quizArea = document.getElementById('quiz-area');
+        const listArea = document.getElementById('list-view');
+        const navControls = document.getElementById('nav-controls');
+
+        if (mode === 'list') {
+            quizArea.style.display = 'none';
+            listArea.style.display = 'block';
+            navControls.style.visibility = 'hidden';
+            renderList(pendingAnchorId ?? lastQuestionId);
+            updateStats(questions.length, questions.length);
+            return;
+        }
+
+        quizArea.style.display = 'flex';
+        listArea.style.display = 'none';
+        navControls.style.visibility = 'visible';
+
+        activeIds = getModeIds(mode);
+        currentIndex = 0;
+        loadQuestion();
+    }
+
+    function getCurrentQuestion() {
+        if (!activeIds.length) activeIds = getModeIds(currentMode);
+        const realId = activeIds[currentIndex % activeIds.length];
+        return questions[realId];
+    }
+
+    function loadQuestion() {
+        resetInputArea();
+
+        if (!activeIds.length) activeIds = getModeIds(currentMode);
+        const q = getCurrentQuestion();
+        lastQuestionId = q.id;
+        const displayIndex = currentIndex % activeIds.length + 1;
+
+        document.getElementById('section-text').innerText = q.chapter;
+        document.getElementById('level-text').innerText = q.level;
+        document.getElementById('question-text').innerText = `[${displayIndex}] ${q.q}`;
+        document.getElementById('jump-index').value = displayIndex;
+
+        const hintEl = document.getElementById('hint-display');
+        hintEl.style.display = 'none';
+        hintEl.innerHTML = '';
+
+        updateStats(displayIndex, activeIds.length);
+    }
+
+    function toggleHint() {
+        const hintEl = document.getElementById('hint-display');
+        const q = getCurrentQuestion();
+
+        if (hintEl.style.display === 'none' || hintEl.style.display === '') {
+            hintEl.innerHTML = `<strong>提示关键词：</strong>${escapeHtml(q.h || "抓住关键词，按逻辑点作答。")}`;
+            hintEl.style.display = 'block';
+        } else {
+            hintEl.style.display = 'none';
+        }
+    }
+
+    function openListForCurrent() {
+        const q = getCurrentQuestion();
+        pendingAnchorId = q.id;
+        switchMode('list');
+    }
+
+    function renderList(anchorId = null) {
+        const container = document.getElementById('list-view');
+        const groups = [
+            { title: '重点掌握', items: questions.filter(item => item.level === '重点掌握') },
+            { title: '掌握', items: questions.filter(item => item.level !== '重点掌握') }
+        ];
+
+        container.innerHTML = groups.map(group => `
+            <section class="list-section">
+                <div class="list-heading">${group.title}<span>${group.items.length} 个知识点</span></div>
+                ${group.items.map(item => `
+                    <div class="list-item ${item.id === anchorId ? 'active-item' : ''}" id="list-item-${item.id}" onclick="jumpFromList(${item.id})">
+                        <div class="list-s">${escapeHtml(item.chapter)}｜${escapeHtml(item.level)}</div>
+                        <div class="list-q">${escapeHtml(item.q)}</div>
+                        <div class="list-a">${escapeHtml(item.a)}</div>
+                    </div>
+                `).join('')}
+            </section>
+        `).join('');
+
+        if (anchorId !== null) {
+            requestAnimationFrame(() => {
+                const target = document.getElementById(`list-item-${anchorId}`);
+                if (target) target.scrollIntoView({ block: 'center', behavior: 'smooth' });
+                pendingAnchorId = null;
+            });
+        }
+    }
+
+    function jumpFromList(realIndex) {
+        currentMode = 'seq';
+        activeIds = getModeIds('seq');
+        currentIndex = activeIds.indexOf(realIndex);
+        if (currentIndex < 0) currentIndex = 0;
+
+        document.getElementById('quiz-area').style.display = 'flex';
+        document.getElementById('list-view').style.display = 'none';
+        document.getElementById('nav-controls').style.visibility = 'visible';
+
+        document.querySelectorAll('.mode-group button').forEach(btn => btn.classList.remove('active'));
+        document.getElementById('mode-seq').classList.add('active');
+
+        loadQuestion();
+    }
+
+    function handleJumpEnter(e) {
+        if (e.key === 'Enter') jumpToQuestion();
+    }
+
+    function jumpToQuestion() {
+        const input = document.getElementById('jump-index');
+        let val = parseInt(input.value, 10);
+        let total = activeIds.length;
+
+        if (isNaN(val) || val < 1 || val > total) {
+            alert(`请输入 1 - ${total} 之间的数字`);
+            return;
+        }
+
+        currentIndex = val - 1;
+        loadQuestion();
+    }
+
+    function changeQuestion(delta) {
+        let total = activeIds.length;
+        currentIndex += delta;
+
+        if (currentIndex < 0) currentIndex = total - 1;
+        if (currentIndex >= total) currentIndex = 0;
+
+        loadQuestion();
+    }
+
+    function resetInputArea() {
+        document.getElementById('result-area').style.display = 'none';
+        document.getElementById('btn-submit').style.display = 'inline-block';
+        document.getElementById('user-input').value = '';
+        document.getElementById('user-input').disabled = false;
+        document.getElementById('btn-submit').innerText = "提交验证";
+        document.getElementById('btn-submit').disabled = false;
+        document.getElementById('btn-submit').style.backgroundColor = 'var(--success-color)';
+    }
+
+    function getModeLabel() {
+        if (currentMode === 'focus') return '重点模式（重点掌握 + 第1/6章强化）';
+        if (currentMode === 'rand') return '随机模式';
+        if (currentMode === 'err') return '错题本';
+        if (currentMode === 'list') return '知识点一览（重点掌握 / 掌握）';
+        return '顺序模式';
+    }
+
+    function updateStats(current, total) {
+        document.getElementById('data-source-text').innerText = `当前题库: ${getModeLabel()}（共${questions.length}题）`;
+        document.getElementById('progress-text').innerText = `进度: ${current} / ${total}`;
+        document.getElementById('error-count').innerText = `错题本: ${errorList.length}`;
+    }
+
+    function renderDiff(userStr, stdStr) {
+        let tempUser = userStr.replace(/[^\u4e00-\u9fa5a-zA-Z0-9]/g, "");
+        let html = '';
+
+        for (let char of stdStr) {
+            if (/[\u4e00-\u9fa5a-zA-Z0-9]/.test(char)) {
+                if (tempUser.includes(char)) {
+                    html += `<span style="color: var(--success-color); font-weight:bold;">${escapeHtml(char)}</span>`;
+                    tempUser = tempUser.replace(char, '');
+                } else {
+                    html += `<span style="color: var(--error-color); opacity: 0.6;">${escapeHtml(char)}</span>`;
+                }
+            } else {
+                html += escapeHtml(char);
+            }
+        }
+        return html;
+    }
+
+    function calculateSimilarity(str1, str2) {
+        const clean1 = str1.replace(/[^\u4e00-\u9fa5a-zA-Z0-9]/g, "");
+        const clean2 = str2.replace(/[^\u4e00-\u9fa5a-zA-Z0-9]/g, "");
+        if (clean2.length === 0) return 0;
+
+        let matchCount = 0;
+        let tempStr1 = clean1;
+        for (let char of clean2) {
+            if (tempStr1.includes(char)) {
+                matchCount++;
+                tempStr1 = tempStr1.replace(char, '');
+            }
+        }
+        const maxLength = Math.max(clean1.length, clean2.length);
+        return Math.floor((matchCount / maxLength) * 100);
+    }
+
+    function checkAnswer() {
+        const userVal = document.getElementById('user-input').value;
+        const currentQ = getCurrentQuestion();
+
+        if (!userVal.trim()) {
+            alert("请先输入答案");
+            return;
+        }
+
+        const score = calculateSimilarity(userVal, currentQ.a);
+        const passed = score >= 60;
+
+        if (!passed && !errorList.includes(currentQ.id)) {
+            errorList.push(currentQ.id);
+        }
+
+        const resultHeader = document.getElementById('result-header');
+        const badgeClass = passed ? 'badge-pass' : 'badge-fail';
+        const badgeText = passed ? '通过' : '未通过';
+
+        resultHeader.innerHTML = `
+            <span class="score-badge ${badgeClass}">${badgeText}</span>
+            <span>得分: ${score}%</span>
+        `;
+
+        document.getElementById('score-text').innerText = `准确率: ${score}%`;
+        document.getElementById('standard-answer').innerHTML = renderDiff(userVal, currentQ.a).replace(/\n/g, '<br>');
+        document.getElementById('result-area').style.display = 'block';
+
+        const submitBtn = document.getElementById('btn-submit');
+        submitBtn.innerText = passed ? "回答正确" : "回答错误";
+        submitBtn.disabled = true;
+        submitBtn.style.backgroundColor = '#95a5a6';
+
+        updateStats(currentIndex % activeIds.length + 1, activeIds.length);
+    }
+
+    function escapeHtml(str) {
+        return String(str).replace(/[&<>"']/g, s => ({
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#39;'
+        }[s]));
+    }
+
+    switchMode('seq');
+</script>
+
+</body>
+</html>
